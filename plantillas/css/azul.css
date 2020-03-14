@@ -1,0 +1,133 @@
+/*
+	Azul
+*/
+body{
+	background-color:#fcfcfc;
+}
+a.boton:hover{
+	color:#4f779f;
+}
+iframe{
+	border:#d1e0ef solid 1px;
+}
+table{
+	border:#e0e8ef solid 1px;
+}
+table th{
+	background-color:#e0e8ef;
+}
+table tr:hover td{
+	background-color:#e0e8ef;
+}
+.resaltado{
+	background-color:#4f779f;
+	border:#3e678f solid 1px;
+}
+.resaltado:hover{
+	background-color:#6289af;
+}
+.mensaje{
+	border:#d1e0ef solid 1px;
+	background-color:#ededed;
+}
+#cabecera{
+	background-color:#35628f;
+	color:#fefefe;
+}
+#cabecera a{
+	color:#fefefe;
+}
+#cabecera #opciones_cabecera ul li a:hover{
+	background-color:#6d90af;
+}
+#cabecera .lista h2{
+	background-image:url('../imagenes/expandir_blanco.png');
+}
+#cabecera .lista h2.contraido{
+	background-image:url('../imagenes/contraer_blanco.png');
+}
+#cabecera .lista h2:hover{
+	background-color:#4f779f;
+}
+#cabecera .lista li{
+	border-right:#4f779f solid 1px;
+}
+#cabecera .lista li ul li a:hover{
+	background-color:#4f779f;
+}
+#cuerpo #barra{
+	background-color:#4f779f;
+	color:#fefefe;
+}
+#cuerpo #barra.panel ul li a:hover{
+	background-color:#6289af;
+}
+#cuerpo #barra a{
+	color:#fefefe;
+}
+#cuerpo #barra .lista li.resaltado{
+	background-color:#6289af;
+}
+#cuerpo #barra .lista li.resaltado a:hover, #cuerpo #barra .lista li ul li a:hover{
+	background-color:#6d90af;
+}
+#cuerpo #sin_columnas{
+	border:#e0e8ef solid 1px;
+}
+#cuerpo #contenido .paneles li{
+	border:#d1e0ef solid 1px;
+}
+#cuerpo #contenido a{
+	color:#35628f;
+}
+#cuerpo #contenido form#agregar_local{
+	border:#e0e8ef solid 1px;
+}
+.lista.locales .local{
+	border:#e9e9e9 solid 1px;
+}
+.lista.locales .local.alt{
+	background-color:#e0e8ef;
+	border:#d1e0ef solid 1px;
+}
+.lista.locales .local h4{
+	border-bottom:#e9e9e9 solid 1px;
+}
+.lista.locales .local.alt h4{
+	border-bottom:#d1e0ef solid 1px;
+}
+.local h4{
+	border-bottom:#4f779f solid 1px;
+}
+.pagination a, .pagination .disabled, .pagination .current{
+	border:1px solid #bbbbbb;
+	color:#35628f;
+}
+.pagination a{
+	background-color:#e0e8ef;
+}
+.pagination a:hover{
+	background-color:#bbbbbb;
+	color:#fefefe;
+	border:1px solid #35628f;
+}
+h5#comentarios{
+	border-bottom:#35628f solid 1px;
+}
+#lista_comentarios li{
+	border:#f0f0f0 solid 1px;
+}
+#lista_comentarios li.alt{
+	background-color:#e0e8ef;
+	border:#d1e0ef solid 1px;
+}
+#paginacion li a:hover{
+	background-color:#efffff;
+}
+#pie{
+	background-color:#35628f;
+	color:#fefefe;
+}
+#pie a{
+	color:#fefefe;
+}

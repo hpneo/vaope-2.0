@@ -1,0 +1,537 @@
+body {
+	font-family:"Trebuchet MS";
+	font-size:0.8em;
+	margin:0px;
+	padding:0px;
+}
+p{
+	padding:4px;
+	margin:0;
+	clear:both;
+}
+a{
+	color:inherit;
+	text-decoration:none;
+}
+a img{
+	border:none;
+	vertical-align:middle;
+	padding:0px 2px;
+}
+a:hover{
+	text-decoration:underline;
+}
+a.boton{
+	display:block;
+	width:81px;
+	height:20px;
+	background:url('../imagenes/botoncito.png') no-repeat center center;
+	padding:3px 0px 3px 0px;
+	font-weight:bold;
+	text-align:center;
+	float:right;
+}
+a.boton:hover{
+	text-decoration:none;
+}
+iframe{
+	display:block;
+	margin:2px auto;
+	padding:0px;
+	border:none;
+}
+form label{
+	font-weight:bold;
+}
+form label.error{
+	width:90%;
+}
+form .lineal{
+	display:block;
+	padding:0;
+}
+form .lineal li{
+	display:inline;
+	list-style:none;
+	margin:0;
+	padding:0;
+}
+form .boton{
+	font-weight:bold;
+	padding:2px;
+}
+table{
+	width:90%;
+	margin:2px auto;
+}
+table td a{
+	display:block;
+	width:100%;
+}
+ul.lista{
+	margin:0;
+	padding:0;
+}
+ul.lista li{
+	list-style:none;
+	margin:0;
+	padding:0px 6px;
+}
+ul.flotante{
+	display:block;
+	margin:0;
+	padding:0;
+	overflow:hidden;
+	clear:both;
+}
+ul.flotante li{
+	display:block;
+	float:left;
+	padding:2px;
+}
+.resaltado{
+	padding:4px;
+	font-weight:bold;
+}
+.resaltado img{
+	vertical-align:text-top;
+}
+.resaltado:hover{
+	text-decoration:none;
+}
+.centrado{
+	text-align:center;
+}
+.derecha{
+	text-align:right;
+}
+.mensaje{
+	display:block;
+	width:95%;
+	font-style:italic;
+	font-weight:bold;
+	margin:5px auto;
+	padding:2px;
+}
+.mensaje.error, label.error{
+	border:#AF2B2B solid 1px;
+	background-color:#DF7D7D;
+	font-style:normal;
+}
+.mensaje.exito{
+	border:#247F1F solid 1px;
+	background-color:#85CF81;
+	font-style:normal;
+}
+.mensaje.info{
+	font-style:normal;
+}
+.mensaje .cerrar{
+	text-align:right;
+	vertical-align:middle;
+}
+textarea{
+	font-family:"Trebuchet MS";
+	font-size:1em;
+}
+/**
+ * General
+**/
+#cabecera, #cuerpo, #pie{
+	display:block;
+	overflow:hidden;
+	width:960px;
+	margin:0 auto;
+}
+/**
+ * Cabecera
+**/
+#cabecera{
+	width:950px;
+	padding:5px;
+}
+#cabecera h1{
+	margin:0px;
+	padding:4px;
+	float:left;
+}
+#cabecera h1 a{
+	display:block;
+	width:230px;
+	height:60px;
+	background:url('../imagenes/logo.png') no-repeat center center;
+	text-indent:-99em;
+}
+#cabecera #opciones_cabecera{
+	display:block;
+	width:710px;
+	float:left;
+	text-align:right;
+}
+#cabecera #opciones_cabecera form{
+	display:block;
+	margin:4px 2px;
+}
+#cabecera #opciones_cabecera form input{
+	vertical-align:sub;
+}
+#cabecera #opciones_cabecera form#login{
+	display:inline;
+}
+#cabecera #opciones_cabecera ul{
+	margin:1px;
+	padding:1px;
+}
+#cabecera #opciones_cabecera ul li{
+	list-style-type:none;
+	display:inline;
+}
+#cabecera #opciones_cabecera ul li a{
+	padding:5px;
+}
+#cabecera #opciones_cabecera ul li a:hover{
+	text-decoration:none;
+}
+h2, h3, h4{
+	margin:0px;
+	padding:0px;
+	font-size:medium;
+}
+#cabecera div.lista{
+	display:block;
+	overflow:hidden;
+	clear:both;
+	padding:1px;
+}
+#cabecera .lista h2{
+	background-position:center left;
+	background-repeat:no-repeat;
+	padding-left:18px;
+}
+#cabecera .lista{
+	display:block;
+	overflow:hidden;
+	margin:0;
+	padding:0px;
+}
+#cabecera .lista li{
+	list-style-type:none;
+	display:block;
+	margin:2px;
+}
+#cabecera .lista li h3{
+	margin:0px;
+	padding:0px;
+	border-bottom:#444444 solid 1px;
+}
+#cabecera .lista li ul.lineal{
+	display:block;
+	margin:0px;
+	padding:3px 0px;
+}
+#cabecera .lista li ul.lineal li{
+	margin:0;
+	padding:5px;
+	display:inline;
+}
+#cabecera .lista li ul.lineal li a{
+	width:100%;
+	padding:2px;
+}
+#cabecera .lista li ul.lineal li a:hover{
+	text-decoration:none;
+}
+#cabecera .lista li ul.lineal li a img{
+	vertical-align:text-bottom;
+}
+/**
+ * Cuerpo
+**/
+#cuerpo #barra{
+	width:230px;
+	padding:5px;
+}
+#cuerpo #barra.panel ul li a{
+	display:block;
+	width:100%;
+}
+#cuerpo #barra.panel ul li a:hover{
+	text-decoration:none;
+}
+#cuerpo #barra .lista{
+	margin:0;
+	padding:1px;
+}
+#cuerpo #barra p{
+	margin:0;
+	padding:2px 1px;
+}
+#cuerpo #barra .lista h3{
+	margin:0;
+	padding:1px;
+	font-size:small;
+}
+#cuerpo #barra .lista li{
+	list-style-type:none;
+	padding:0px;
+	margin:2px 0px;
+}
+#cuerpo #barra .lista li.resaltado a, #cuerpo #barra .lista li ul li a{
+	display:block;
+	width:100%;
+}
+#cuerpo #barra .lista li.resaltado a:hover, #cuerpo #barra .lista li ul li a:hover{
+	text-decoration:none;
+}
+#cuerpo #barra .lista li ul{
+	margin:0;
+	padding:0px 5px;
+}
+#cuerpo #barra #tags li, #cuerpo #barra #tags li a:hover{
+	background-image:url('../imagenes/tag.png');
+	background-position:center right;
+	background-repeat:no-repeat;
+}
+#cuerpo #sin_columnas{
+	display:block;
+	width:70%;
+	margin:2px auto;
+	padding:0;
+}
+#cuerpo #buscador_principal{
+	font-size:large;
+	display:block;
+	padding:5px;
+	text-align:center;
+}
+#cuerpo #buscador_principal input{
+	font-size:large;
+}
+#cuerpo #buscador_principal .boton{
+	display:block;
+	width:80px;
+	font-weight:bold;
+	margin:3px auto;
+	padding:4px;
+}
+#cuerpo #contenido, #cuerpo #barra{
+	float:left;
+}
+#cuerpo #contenido{
+	width:720px;
+}
+#cuerpo #contenido .paneles{
+	display:block;
+	overflow:hidden;
+	width:99%;
+	list-style:none;
+	padding:2px;
+	margin:4px auto;
+}
+#cuerpo #contenido .paneles li{
+	display:block;
+	clear:both;
+	width:100%;
+}
+#cuerpo #contenido .paneles li h5{
+	margin:0;
+	padding:1px;
+	font-size:small;
+}
+#cuerpo #contenido form{
+	padding:5px;
+	margin:0px;
+}
+#cuerpo #contenido form#agregar_local{
+	display:block;
+	width:97%;
+	margin:4px auto;
+}
+#cuerpo #contenido form p{
+	overflow:hidden;
+	margin:5px 0px;
+}
+#cuerpo #contenido form label, #cuerpo #sin_columnas form label{
+	display:block;
+	width:100px;
+	float:left;
+	text-align:right;
+	margin:2px;
+	vertical-align:middle;
+}
+#cuerpo #contenido form textarea, #cuerpo #sin_columnas form textarea{
+	width:60%;
+	height:200px;
+}
+#cuerpo #contenido form input, #cuerpo #contenido form p select{
+	display:block;
+	margin:1px 10px;
+	float:left;
+	vertical-align:middle;
+}
+#cuerpo .telefonos, #cuerpo .media{
+	display:block;
+	clear:both;
+	margin-left:100px;
+}
+#cuerpo #contenido form .boton{
+	clear:both;
+	padding:5px;
+	font-weight:bold;
+}
+#cuerpo #sin_columnas form .boton{
+	margin-left:110px;
+}
+/**
+ * Local
+**/
+.lista.locales{
+	margin:0;
+	padding:0;
+}
+.lista.locales .local{
+	margin:8px auto;
+	padding:4px;
+}
+.local{
+	display:block;
+	width:97%;
+	margin:4px auto;
+	padding:4px;
+	overflow:hidden;
+}
+.local h4{
+	margin:0;
+	padding:1px;
+	font-size:medium;
+}
+div.local_puntuacion{
+	display:block;
+	float:left;
+	height:16px;
+	width:80px;
+	background:url('../imagenes/estrella_gris.png') repeat-x center left;
+}
+div.local_puntuacion div{
+	display:block;
+	height:16px;
+	background:url('../imagenes/estrella.png') repeat-x center left;
+	text-indent:-99em;
+}
+.local a{
+	font-weight:bold;
+}
+.local .local_direccion{
+	margin:0px 10px;
+	padding:0;
+	font-style:italic;
+	font-size:small;
+}
+.local h5{
+	font-size:small;
+	margin:0;
+	padding:1px;
+}
+.local p, .local  #formulario_comentario, .local .lista li{
+	margin:0;
+	padding:1px 10px;
+	padding:1px 10px;
+}
+.local #local_mapa{
+	display:block;
+	margin:0px 10px;
+}
+.local_puntuacion{
+	display:block;
+	float:left;
+	height:16px;
+	background:url('../imagenes/estrella.png') repeat-x;
+	text-indent:-99em;
+	margin-left:5px;
+}
+/**
+ * Paginacion
+**/
+.pagination{
+	display:block;
+	width:690px;
+	margin:6px auto;
+	padding:1px;
+	text-align:center;
+}
+.pagination a, .pagination .disabled, .pagination .current{
+	display:inline;
+	width:auto;
+	height:auto;
+	padding:3px 7px;
+	margin:0px 3px;
+	text-align:center;
+}
+.pagination a:hover{
+	text-decoration:none;
+}
+#lista_comentarios{
+	margin:2px 10px;
+	padding:0;
+}
+#lista_comentarios li{
+	list-style:none;
+	padding:2px;
+	margin:8px auto;
+}
+#formulario_comentario textarea{
+	display:block;
+	width:95%;
+	height:100px;
+	margin:10px 20px;
+}
+/**
+ * Registro
+**/
+#registro{
+	display:block;
+	margin-left:10px;
+}
+#registro, #registro input{
+	font-size:medium;
+}
+#registro p{
+	overflow:hidden;
+	margin:3px 2px;
+}
+#registro label{
+	display:block;
+	width:100px;
+	float:left;
+	text-align:right;
+	margin:2px 0px;
+}
+#registro input, #registro select{
+	display:block;
+	margin:1px 10px;
+	float:left;
+	vertical-align:middle;
+}
+#registro .boton{
+	padding:5px;
+	font-weight:bold;
+}
+/**
+ * Panel
+**/
+#local_descripcion{
+	display:block;
+	width:500px;
+	height:120px;
+	margin-left:110px;
+}
+.media li input{
+	width:360px;
+}
+/**
+ * Pie
+**/
+#pie{
+	text-align:center;
+	padding:2px 0px;
+}

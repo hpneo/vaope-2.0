@@ -1,0 +1,57 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+    "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content=
+"text/html; charset=utf-8" />
+<title>Slimbox (Extended Version)</title>
+<style type="text/css" media="all">
+/*<![CDATA[*/
+a:hover { background-color: #ddd; }
+.blog-entry-body h2 { font-size:14px; } 
+.blog-entry-body h3 { color:#888; } 
+/*]]>*/
+</style>
+
+<link href="styles/slimbox_ex.css" rel="stylesheet" media="screen" title="slimbox">
+<script type="text/javascript" src="http://homepage.mac.com/yukikun/software/slimbox_ex/scripts/lib.js"></script>
+<script type="text/javascript" src="scripts/slimbox_ex.js"></script>
+</script>
+</head>
+<body>
+<h1>About Slimbox (Extended Version)</h1>
+<p>2007-02-21 (Wed)</p>
+<p><a href="http://www.digitalia.be/software/slimbox">Slimbox</a> is Lightbox clone by Christophe Beyls. This extended version has additional features as follows.</p>
+<ul>
+<li>Support to show external content by iframe. You can assign url not only for image but also for general html document.</li>
+<li>Support to set content size. You can add width/height parameter in rev attribute of the anchor url.<br>e.g.) rev=&quot;width=500, height=300&quot; (For image content, you can also use percent value.)</li>
+<li>Some rendering problem with IE6 is fixed. Now you can use Slimbox in valid XHTML document with XML prolog.</li>
+<li>Of course, license is same as original.(MIT-style)</li>
+</ul>
+
+<h2>Demo (click to view)</h2>
+<h3>iframe content</h3>
+<p><a href="http://www.google.com/" rel="lightbox[site_sample]" title="www.google.com">Google</a> | 
+<a href="http://www.yahoo.com/" rel="lightbox[site_sample]" title="www.yahoo.com">Yahoo!</a> |
+<a href="sample.html" rel="lightbox[site_sample]" title="Caption is here. Blah-blah-blah, blah-blah-blah, and blah, blah, blah! (You can write your cool text.)">local iframe content</a></p>
+
+<h3>width/height parameter</h3>
+<p><a href="sample.jpg" rel="lightbox[params_sample]" title="Image (Original size)">Image (Original size)</a> | 
+<a href="sample.jpg" rev="width=50%, height=50%" rel="lightbox[params_sample]" title="Image (size:50%)">Image (50% size)</a> | 
+<a href="http://www.google.com/search?hl=en&q=JR+E233&btnG=Search&lr=" rev="width=700, height=400" rel="lightbox[params_sample]" title="www.google.com (iframe size: width=700, height=400)">iFrame (pixel value only)</a></p>
+
+<h2>Requirements and Usage</h2>
+<p>See the original <a href="http://www.digitalia.be/software/slimbox">Slimbox</a> page. You need to download <a href="http://mootools.net/">mootools</a> javascript library at least.</p>
+
+<h3>Compressed version</h3>
+<p><a href="scripts/slimbox_ex.js" rel="lightbox[code]" rev="width=700" title="accessible code">scripts/slimbox_ex.js</a> is accessible source code that you rework. <a href="scripts/slimbox_ex_compressed.js" rel="lightbox[code]" rev="width=700" title="lightweight code">scripts/slimbox_ex_compressed.js</a> is compressed code (about 5KB) using <a href="http://dean.edwards.name/packer/">/packer/</a>. Have a choice as usage.</p>
+
+<h2>Release note</h2>
+<ul>
+<li>You might fall on error when point external site using mootools.js. Do not to assign external site in anchor using Slimbox to avoid conflicts as much as possible.</li>
+</ul>
+
+<p>&copy; 2007 yukikun. Some rights reserved.</p>
+
+</body>
+</html>

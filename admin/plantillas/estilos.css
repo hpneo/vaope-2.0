@@ -1,0 +1,98 @@
+body {
+	font-family:"Calibri";
+	font-size:0.9em;
+}
+h1{
+	margin:0;
+	padding:0;
+}
+a{
+	color:#333333;
+	text-decoration:none;
+}
+a img{
+	border:none;
+}
+a:hover{
+	color:#666666;
+	text-decoration:underline;
+}
+#cuerpo{
+	display:block;
+	overflow:hidden;
+}
+#lateral, #contenido{
+	float:left;
+}
+#lateral{
+	display:block;
+	width:200px;
+	background-color:#eeeeee;
+	padding:4px;
+}
+#contenido{
+	min-width:600px;
+	padding:10px;
+	border-left:#666666 solid 1px;
+}
+#contenido h2{
+	margin:0;
+	padding:0;
+	border-bottom:#cccccc solid 1px;
+}
+#contenido form label{
+	font-weight:bold;
+}
+#contenido form input.boton{
+	padding:5px;
+	font-weight:bold;
+}
+.bloque h2{
+	margin:0;
+	padding:0;
+}
+.bloque ul{
+	margin:0;
+	padding:0;
+}
+.bloque ul li{
+	list-style:none;
+	padding:0 15px;
+}
+table{
+	width:90%;
+	margin:2px auto;
+}
+table th, table tr:hover{
+	background-color:#eeeeee;
+}
+table tr.padre td{
+	font-weight:bold;
+}
+table tr.hijo td{
+	padding-left:20px;
+}
+table td.centrado, table tr.hijo td.centrado{
+	text-align:center;
+	padding:1px;
+}
+table td a{
+	display:block;
+	width:100%;
+}
+.mensaje{
+	width:95%;
+	font-style:italic;
+	font-weight:bold;
+	margin:2px auto;
+}
+.mensaje.error{
+	border:#AF2B2B solid 1px;
+	background-color:#DF7D7D;
+	font-style:normal;
+}
+.mensaje.exito{
+	border:#247F1F solid 1px;
+	background-color:#85CF81;
+	font-style:normal;
+}

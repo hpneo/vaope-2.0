@@ -1,0 +1,902 @@
+<?php
+/**
+ * Funciones usadas en las plantillas.
+**/
+	function titulo(){
+		$url = parsear_url();
+		$titulo = nombre;
+		if($url == ""){
+			$titulo .= ' - Tu gu&iacute;a de locales en el Per&uacute;';
+		}
+		if($resultado = estas_en('categoria')){
+			$categoria = new Categoria();
+			$categoria = $categoria->info('nombre='.$resultado[1]);
+			if($categoria)
+				$titulo .= ' &raquo; Locales en la categor&iacute;a '.$categoria->titulo;
+			else
+				$titulo .= " &raquo; Error";
+		}
+		if($resultado = estas_en('zona')){
+			$zona = new Zona();
+			$zona = $zona->info('nombre='.$resultado[1]);
+			if($zona)
+				$titulo .= ' &raquo; Locales en '.$zona->titulo;
+			else
+				$titulo .= ' &raquo; Error';
+		}
+		if($resultado = estas_en('locales')){
+			$zona = new Zona();
+			$zona = $zona->info('nombre='.$resultado[1]);
+			$categoria = new Categoria();
+			$categoria = $categoria->info('nombre='.$resultado[2]);
+			if($categoria && $zona)
+				$titulo .= ' &raquo; '.$categoria->titulo.' en '.$zona->titulo;
+			else
+				$titulo .= '&raquo; Error';
+		}
+		if($resultado = estas_en('local')){
+			$local = new Local();
+			$local = $local->info('nombre='.$resultado[1]);
+			if($local)
+				$titulo .= ' &raquo; '.$local->titulo. ' ('.$local->zona->titulo.')';
+			else
+				$titulo .= ' &raquo Error';
+		}
+		if($resultado = estas_en('tag')){
+			$tag = new Tag();
+			$tag = $tag->infoTag('nombre='.$resultado[1]);
+			if($tag)
+				$titulo .= ' &raquo; Locales con la etiqueta '.$tag->titulo;
+			else
+				$titulo .= ' &raquo; Error';
+		}
+		if($resultado = estas_en('usuario')){
+			if($resultado[2]==""){
+				$titulo .= ' &raquo; Perfil de '.urldecode($resultado[1]);
+			}
+			else{
+				$titulo .= ' &raquo; Favoritos de '.urldecode($resultado[1]);
+			}
+		}
+		if(estas_en('panel')){
+			$titulo .= ' &raquo; Panel de usuario';
+		}
+		if(estas_en('registro')){
+			$titulo .= ' &raquo; Registro';
+		}
+		if($resultado = estas_en('pagina')){
+			$titulo .= ' &raquo; '.$resultado->titulo;
+		}
+		if(estas_en('busqueda'))
+			$titulo .= ' &raquo; Resultados de b&uacute;squeda';
+		return $titulo;
+	}
+	function home(){
+		echo url;
+	}
+	function obtener_cabecera(){
+		include("plantillas/cabecera.php");
+	}
+	function obtener_lateral(){
+		include("plantillas/lateral.php");
+	}
+	function obtener_comentarios(){
+		include("plantillas/comentarios.php");
+	}
+	function obtener_pie(){
+		include("plantillas/pie.php");
+	}
+	function listar_categorias($id, $criterio=NULL, $zona=NULL){
+		$categoria0 = new Categoria();
+		if(!ereg("idPadre=", $criterio))
+			$categorias = $categoria0->info("idPadre=0|".$criterio);
+		else
+			$categorias = $categoria0->info($criterio);
+		echo '<ul class="lista" id="'.$id.'">';
+		foreach($categorias as $categoria){
+			//No mostrar categoria General
+			if($categoria->id==1)
+				continue;
+			$subcategorias = $categoria0->info("idPadre=".$categoria->id);
+			echo '
+				<li><h3>'.$categoria->titulo.'</h3>
+				';
+			echo '	<ul>';
+			if(gettype($subcategorias)!="array"){
+				if($zona==""){
+					echo '
+						<li><a href="'.url.'/feed/categoria/'.$subcategorias->nombre.'/" class="lineal" title="Feed de la categor&iacute;a '.$subcategorias->titulo.'"><img src="'.url.'/plantillas/imagenes/feed.png" /></a><a href="'.url.'/categoria/'.$subcategorias->nombre.'/">'.$subcategorias->titulo.' ('.$subcategorias->n_locales().')</a></li>
+					';
+				}
+				else{
+					echo '
+						<li><a href="'.url.'/locales/'.$zona.'/'.$subcategorias->nombre.'/">'.$subcategorias->titulo.'</a></li>
+					';
+				}
+			}
+			else{
+				foreach($subcategorias as $subcategoria){
+					if($zona==""){
+						echo '
+							<li><a href="'.url.'/feed/categoria/'.$subcategoria->nombre.'/" class="lineal" title="Feed de la categor&iacute;a '.$subcategoria->titulo.'"><img src="'.url.'/plantillas/imagenes/feed.png" /></a><a href="'.url.'/categoria/'.$subcategoria->nombre.'/">'.$subcategoria->titulo.' ('.$subcategoria->n_locales().')</a></li>
+						';
+					}
+					else{
+						echo '
+							<li><a href="'.url.'/locales/'.$zona.'/'.$subcategoria->nombre.'/">'.$subcategoria->titulo.'</a></li>
+						';
+					}
+				}
+			}
+			echo '</ul>
+				</li>
+				';
+		}
+		echo '</ul>';
+	}
+	function listar_categorias_combo($idCategoria=NULL){
+		$categoria0 = new Categoria();
+		$categorias = $categoria0->info("idPadre=0");
+		echo '<select name="local_categoria" id="local_categoria">';
+		if(!$categorias){
+			echo '<option value="">No hay categor&iacute;as</option>';
+		}
+		else{
+			echo '<option value="">Elige una categor&iacute;a</option>';
+			foreach($categorias as $categoria){
+				$subcategorias = $categoria0->info("idPadre=".$categoria->id);
+				echo '<optgroup label="'.$categoria->titulo.'">';
+				if(gettype($subcategorias)!="array"){
+					if($subcategorias->id==$idCategoria)
+						echo '<option value="'.$subcategorias->id.'" selected="selected">'.$subcategorias->titulo.'</option>';
+					else
+						echo '<option value="'.$subcategorias->id.'">'.$subcategorias->titulo.'</option>';
+				}
+				else{
+					foreach($subcategorias as $subcategoria){
+						if($subcategoria->id==$idCategoria)
+							echo '<option value="'.$subcategoria->id.'" selected="selected">'.$subcategoria->titulo.'</option>';
+						else
+							echo '<option value="'.$subcategoria->id.'">'.$subcategoria->titulo.'</option>';
+					}
+				}
+				echo '</optgroup>';
+			}
+		}
+		echo '</select>';
+	}
+	function listar_zonas($id, $criterio=NULL, $categoria=NULL){
+		$zona0 = new Zona();
+		if(!ereg("idPadre=", $criterio))
+			$zonas = $zona0->info("idPadre=0|".$criterio);
+		else
+			$zonas = $zona0->info($criterio);
+		echo '<ul class="lista" id="'.$id.'">';
+		foreach($zonas as $zona){
+			//No mostrar zona General
+			if($zona->id==1)
+				continue;
+			$subzonas = $zona0->info("idPadre=".$zona->id);
+			echo '
+				<li><h3>'.$zona->titulo.'</h3>
+				';
+			echo '	<ul>';
+			if(gettype($subzonas)!="array"){
+				if($categoria==""){
+					echo '
+						<li><a href="'.url.'/feed/zona/'.$subzonas->nombre.'/" class="lineal" title="Feed de locales en '.$subzonas->titulo.'"><img src="'.url.'/plantillas/imagenes/feed.png" /></a><a href="'.url.'/zona/'.$subzonas->nombre.'/">'.$subzonas->titulo.' ('.$subzonas->n_locales().')</a></li>
+					';
+				}
+				else{
+					echo '
+						<li><a href="'.url.'/locales/'.$subzonas->nombre.'/'.$categoria.'/">'.$subzonas->titulo.'</a></li>
+					';
+				}
+			}
+			else{
+				foreach($subzonas as $subzona){
+					if($categoria==""){
+						echo '
+							<li><a href="'.url.'/feed/zona/'.$subzona->nombre.'/" class="lineal" title="Feed de locales en '.$subzona->titulo.'"><img src="'.url.'/plantillas/imagenes/feed.png" /></a><a href="'.url.'/zona/'.$subzona->nombre.'/">'.$subzona->titulo.' ('.$subzona->n_locales().')</a></li>
+						';
+					}
+					else{
+						echo '
+							<li><a href="'.url.'/locales/'.$subzona->nombre.'/'.$categoria.'/">'.$subzona->titulo.'</a></li>
+						';
+					}
+			}
+			}
+			echo '</ul>
+				</li>
+				';
+		}
+		echo '</ul>';
+	}
+	function listar_zonas_combo($idZona=NULL){
+		$zona0 = new Zona();
+		$zonas = $zona0->info("idPadre=0");
+		echo '<select name="local_zona" id="local_zona">';
+		if(!$zonas){
+			echo '
+			<option value="">No hay zonas</option>';
+		}
+		else{
+			echo '
+			<option value="">&iquest;D&oacute;nde se encuentra el local?</option>';
+			foreach($zonas as $zona){
+				$subzonas = $zona0->info("idPadre=".$zona->id);
+				echo '
+				<optgroup label="'.$zona->titulo.'">';
+				if(!$subzonas){
+					echo '
+					<option value="">No hay zonas.</option>';
+				}
+				else{
+					if(gettype($subzonas)!="array"){
+						if($subzonas->id==$idZona)
+							echo '
+							<option value="'.$subzonas->id.'" selected="selected">'.$subzonas->titulo.'</option>';
+						else
+							echo '
+							<option value="'.$subzonas->id.'">'.$subzonas->titulo.'</option>';
+					}
+					else{
+						foreach($subzonas as $subzona){
+							if($subzona->id==$idZona)
+								echo '
+								<option value="'.$subzona->id.'" selected="selected">'.$subzona->titulo.'</option>';
+							else
+								echo '
+								<option value="'.$subzona->id.'">'.$subzona->titulo.'</option>';
+						}
+					}
+				}
+				echo '</optgroup>';
+			}
+		}
+		echo '</select>';
+	}
+	function mostrar_locales($criterios, $n){
+		$criterio = explode("|", $criterios);
+		for($i=0;$i<sizeof($criterio);$i++){
+			$criterio[$i] = explode("=", $criterio[$i]);
+			if($criterio[$i][0]=="categoria"){
+				$categoria = new Categoria();
+				$categoria = $categoria->info('nombre='.$criterio[$i][1]);
+				$busqueda.="categoria=".$categoria->id."|";
+			}
+			if($criterio[$i][0]=="zona"){
+				$zona = new Zona();
+				$zona = $zona->info('nombre='.$criterio[$i][1]);
+				$busqueda.="zona=".$zona->id."|";
+			}
+			elseif($criterio[$i][0]=="tag"){
+				$tag = new Tag();
+				$tag = $tag->infoTag('nombre='.$criterio[$i][1]);
+				$busqueda="tag=".$tag->id."|";
+			}
+		}
+		$local0 = new Local();
+		//Calculo de la paginacion
+		$n_locales = sizeof($local0->info($busqueda));
+		if(!$_GET['p'] || $_GET['p']=="" || $_GET['p']=="1"){
+			$p = 1;
+			$limite = $n;
+			$inicio = 1;
+		}
+		else{
+			$p = $_GET['p'];
+		}
+		$limite_inferior = ($p-1)*$n;
+		$n_paginas = ceil($n_locales/$n);
+		if(!isset($p)){
+			$p = 1;
+			$inicio = 1;
+			$limite = $n;
+		}
+		else{
+			$seccionActual = intval(($p-1)/$n);
+			$inicio = ($seccionActual*$n)+1;
+			if($p<$n){
+				$limite = $inicio+$n-1;
+			}
+			else{
+				$limite = $n;
+			}
+			if($limite>$n){
+				$limite = $n;
+			}
+		}
+		$locales = $local0->info($busqueda."ordenar=puntuacion|limites=$limite_inferior,$limite");
+		if(!$locales){
+			echo '<h3 class="centrado">No existen locales.</h3>';
+		}
+		elseif(sizeof($locales)==1){
+			$local = $locales;
+			echo '<ul class="lista locales">';
+			echo '
+				<li class="local">
+					<h4><a href="'.url.'/local/'.$local->nombre.'">'.$local->titulo.'</a></h4>
+					<p>Agregado por <a href="'.url.'/usuario/'.$local->autor->nick.'/">'.$local->autor->nick.'</a> en la categor&iacute;a <a href="'.url.'/categoria/'.$local->categoria->nombre.'/">'.$local->categoria->titulo.'</a></p>
+					<div class="local_descripcion">
+					'.$local->descripcion.'
+					</div>
+					<p><strong>Direcci&oacute;n:</strong> '.$local->direccion.', <a href="'.url.'/zona/'.$local->zona->nombre.'/">'.$local->zona->titulo.'</a></p>
+				</li>
+			';
+			echo '</ul>';
+		}
+		else{
+			echo '<ul class="lista locales">';
+			$i=0;
+			foreach($locales as $local){
+				if($i%2==0)
+					$clase=" alt";
+				else
+					$clase="";
+				echo '
+					<li class="local'.$clase.'">
+						<h4><a href="'.url.'/local/'.$local->nombre.'">'.$local->titulo.'</a></h4>
+						<p>Agregado por <a href="'.url.'/usuario/'.$local->autor->nick.'/">'.$local->autor->nick.'</a> en la categor&iacute;a <a href="'.url.'/categoria/'.$local->categoria->nombre.'/">'.$local->categoria->titulo.'</a></p>
+						<div class="local_descripcion">
+						'.$local->descripcion.'
+						</div>
+						<p><strong>Direcci&oacute;n:</strong> '.$local->direccion.', <a href="'.url.'/zona/'.$local->zona->nombre.'/">'.$local->zona->titulo.'</a></p>
+					</li>
+				';
+				$i++;
+			}
+			echo '</ul>';
+		}
+		echo getPaginationString("", $n_locales, $p, $n, 2, "?p=");
+	}
+	function mostrar_tags($tags){
+		if($tags!=""){
+			echo '<ul id="tags">
+			';
+			foreach($tags as $tag){
+				echo '<li class="resaltado"><a href="'.url.'/tag/'.$tag->nombre.'/" title="Tag: '.$tag->titulo.'">'.$tag->titulo.'</a></li>
+				';
+			}
+			echo '</ul>';
+		}
+		else{
+			echo 'No hay tags.';
+		}
+	}
+	function mostrar_puntuacion($puntuacion){
+		$tamano = (80*$puntuacion)/5;
+		return '<div class="local_puntuacion" title="'.$puntuacion.' puntos"><div style="width:'.$tamano.'px;">'.$puntuacion.' puntos</div></div>';
+	}
+	function mapa_estatico($coordenadas){
+		echo '<img id="local_mapa" src="http://maps.google.com/staticmap?key='.gmaps_api_key.'&amp;center='.$coordenadas[0].','.$coordenadas[1].'&amp;zoom=16&amp;size=600x300&amp;markers='.$coordenadas[0].','.$coordenadas[1].'" />';
+	}
+	function avatar($email, $s){
+		$ruta_defecto = url.'/plantillas/imagenes/anonimo.png';
+		echo '<img src="http://www.gravatar.com/avatar/'.md5($email).'.jpg?d='.urlencode($ruta_defecto).'&amp;s='.$s.'" />';
+	}
+	function telefonos($telefonos){
+		if(!$telefonos){
+			echo '<h5>No hay tel&eacute;fono de este local.</h5>';
+		}
+		else{
+			if(sizeof($telefonos)==1)
+				echo '<h5>Tel&eacute;fono:</h5>';
+			else
+				echo '<h5>Tel&eacute;fonos:</h5>';
+			echo '<ul class="lista">';
+			foreach($telefonos as $telefono){
+				if($telefono->tipo=="delivery")
+					echo '<li><strong>Delivery:</strong> '.$telefono->numero.'</li>';
+				elseif($telefono->tipo=="reservaciones")
+					echo '<li><strong>Reservaciones:</strong> '.$telefono->numero.'</li>';
+			}
+			echo '</ul>';
+		}
+	}
+	function fotos($fotos){
+		if($fotos){
+			echo '
+			<h5>Fotos:</h5>
+			<ul class="flotante">';
+			foreach($fotos as $foto){
+				echo '
+				<li>'.embeber_foto($foto->ruta).'</li>
+				';
+			}
+			echo '</ul>';
+		}
+	}
+	function videos($videos){
+		if($videos){
+			echo '
+			<h5>Videos:</h5>
+			<ul class="flotante">
+			';
+			foreach($videos as $video){
+				echo '
+				<li>'.embeber_video($video->ruta).'</li>
+				';
+			}
+			echo '</ul>';
+		}
+	}
+	function embeber_foto($ruta){
+		if(ereg('\.[a-z]{3}$', $ruta))
+			return '<img src="'.$ruta.'" />';
+		else{
+			if(strstr($ruta, 'www.flickr.com') || strstr($ruta, 'flickr.com')){
+				$_ruta = ereg_replace('^(.*)flickr\.com\/', '', $ruta);
+				$id = explode('/', $_ruta);
+				$xml = simplexml_load_file('http://api.flickr.com/services/rest/?method=flickr.photos.getInfo&api_key=7072bee5676a38d5038f087c69237cae&photo_id='.$id[2]);
+				return '
+				<a href="http://farm'.$xml->photo->attributes()->farm.'.static.flickr.com/'.$xml->photo->attributes()->server.'/'.$xml->photo->attributes()->id.'_'.$xml->photo->attributes()->secret.'_m.jpg" rel="facebox">
+					<img src="http://farm'.$xml->photo->attributes()->farm.'.static.flickr.com/'.$xml->photo->attributes()->server.'/'.$xml->photo->attributes()->id.'_'.$xml->photo->attributes()->secret.'_s.jpg" />
+				</a>
+				';
+			}
+		}
+	}
+	function embeber_video($ruta){
+		if(ereg('^(.*)youtube\.com', $ruta)){
+			$ruta = str_replace('watch?v=', 'v/', $ruta);
+			return '<object type="application/x-shockwave-flash" style="width:425px;height:350px" data="'.$ruta.'&amp;hl=es&amp;fs=1&amp;rel=0"><param name="movie" value="'.$ruta.'&amp;hl=es&amp;fs=1&amp;rel=0" /></object>';
+		}
+		elseif(ereg('^(.*)vimeo\.com', $ruta)){
+			$ruta = ereg_replace('^(.*)vimeo\.com\/', '', $ruta);
+			return '<object type="application/x-shockwave-flash" style="width:425px;height:239px;" data="http://vimeo.com/moogaloop.swf?clip_id='.$ruta.'&amp;server=vimeo.com&amp;show_title=1&amp;show_byline=1&amp;show_portrait=1&amp;color=00ADEF&amp;fullscreen=1"><param name="movie" value="http://vimeo.com/moogaloop.swf?clip_id='.$ruta.'&amp;server=vimeo.com&amp;show_title=1&amp;show_byline=1&amp;show_portrait=1&amp;color=00ADEF&amp;fullscreen=1" /></object>';
+		}
+	}
+	function imprimir_metatags(){
+		$categorias = new Categoria();
+		$categorias = $categorias->info();
+		$i=0;
+		foreach($categorias as $categoria){
+			if($categoria->id==1 || $categoria->id==2)
+				continue;
+			$zonas = new Zona();
+			$zonas = $zonas->info();
+			foreach($zonas as $zona){
+				if($zona->id==1 || $zona->id==2)
+					continue;
+				$lista[$i] = $categoria->titulo.' en '.$zona->titulo;
+				$i++;
+			}
+		}
+		
+		$metatags = implode(',', $lista);
+		echo '
+		<meta name="description" content="Vao Pe! es una gu&iacute;a de locales para Per&uacute;. Aqu&iacute; podr&aacute;s encontrar lo que desees." />
+		<meta name="keywords" content="'.$metatags.'" />
+		';
+	}
+	function imprimir_feeds(){
+		echo '
+		<link rel="alternate" type="application/rss+xml" title="&Uacute;ltimos locales agregados en '.nombre.'" href="'.url.'/feed/" />
+		';
+		if($resultado = estas_en('categoria'))
+			echo '
+			<link rel="alternate" type="application/rss+xml" title="'.titulo().'" href="'.url.'/feed/categoria/'.$resultado[1].'/" />
+			';
+		if($resultado = estas_en('zona'))
+			echo '
+			<link rel="alternate" type="application/rss+xml" title="'.titulo().'" href="'.url.'/feed/zona/'.$resultado[1].'/" />
+			';
+		if($resultado = estas_en('locales'))
+			echo '
+			<link rel="alternate" type="application/rss+xml" title="'.titulo().'" href="'.url.'/feed/locales/'.$resultado[1].'/'.$resultado[2].'/" />
+			';
+		if($resultado = estas_en('tag'))
+			echo '
+			<link rel="alternate" type="application/rss+xml" title="'.titulo().'" href="'.url.'/feed/tag/'.$resultado[1].'/" />
+			';
+	}
+	function imprimir_js(){
+		echo '
+		<script type="text/javascript" language="javascript" src="'.url.'/plantillas/js/jquery.js"></script>
+		<script type="text/javascript" language="javascript" src="'.url.'/plantillas/js/jquery.ui.js"></script>
+		<script type="text/javascript" language="javascript" src="'.url.'/plantillas/js/jquery-autocomplete/jquery.autocomplete.pack.js"></script>
+		<link rel="stylesheet" type="text/css" href="'.url.'/plantillas/js/jquery-autocomplete/jquery.autocomplete.css" />
+		<script type="text/javascript">
+			$(document).ready(function(){
+				$("#lista-categorias").hide();
+				$("#titulo-categorias").click(function(){
+					$(this).toggleClass("contraido");
+					$("#lista-categorias").toggle("blind", {direction:"vertical"}, "fast");
+				});
+				$("#lista-zonas").hide();
+				$("#titulo-zonas").click(function(){
+					$(this).toggleClass("contraido");
+					$("#lista-zonas").toggle("blind", {direction:"vertical"}, "fast");
+				});
+			});
+		</script>
+		';
+		if(estas_en('inicio')){
+			echo'
+			<script type="text/javascript">
+				$(document).ready(function(){
+					$("#categoria").autocomplete("ajax.php?accion=autocompletar_categoria", {
+						width: 260,
+						selectFirst: false
+					});
+					$("#zona").autocomplete("ajax.php?accion=autocompletar_zona", {
+						width: 260,
+						selectFirst: false
+					});
+					$("#cerrar_bienvenida").click(function(){
+						$("#bienvenida").fadeOut("slow");
+					});
+				});
+			</script>
+			';
+		}
+		if($resultado = estas_en('panel')){
+				echo'
+				<script type="text/javascript" language="javascript" src="'.url.'/plantillas/js/jquery-validate/jquery.validate.pack.js"></script>
+				<script type="text/javascript">
+					$(document).ready(function(){
+						$(".eliminar_local").click(function(event){
+							event.preventDefault();
+							var id = $(this).attr("id");
+							var id = id.substring(6);
+							if(confirm("¿Estás seguro de querer eliminar este local?")==true){
+								$.ajax({
+									type:"GET",
+									url:"'.url.'/ajax.php",
+									data: "accion=eliminar_local&id="+id,
+									success: function(text){
+										if(text=="OK"){
+											$("#fila-"+id).fadeOut("slow");
+										}
+									}
+								});
+							}
+						});
+					});
+				</script>
+				';
+				if($resultado=='agregar'){
+					echo'
+					<script type="text/javascript">
+						$(document).ready(function() {
+							$("#agregar_local").validate({
+								rules:{
+									local_titulo: "required",
+									local_categoria: "required",
+									local_zona: "required",
+									local_direccion: "required"
+								},
+								messages:{
+									local_titulo: "Debes escribir un nombre para este local.",
+									local_categoria: "Debes elegir una categoria.",
+									local_zona: "Debes elegir una zona.",
+									local_direccion: "Debes escribir una direccion"
+								}
+							});
+						});
+					</script>
+					';
+				}
+				if($resultado=='editar'){
+					echo'
+					<script type="text/javascript">
+						$(document).ready(function() {
+							$("#agregar_local").validate({
+								rules:{
+									local_titulo: "required",
+									local_categoria: "required",
+									local_zona: "required",
+									local_direccion: "required"
+								},
+								messages:{
+									local_titulo: "Debes escribir un nombre para este local.",
+									local_categoria: "Debes elegir una categoria.",
+									local_zona: "Debes elegir una zona.",
+									local_direccion: "Debes escribir una direccion"
+								}
+							});
+						});
+					</script>
+					';
+				}
+				if($resultado=='agregar' || ($resultado=='editar' && trim($_GET['id'])!="")){
+				echo'
+				<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key='.gmaps_api_key.'" type="text/javascript"></script>
+				<script type="text/javascript">
+					$(document).ready(function(){
+				';
+				if($resultado=='editar' && trim($_GET['id'])!=""){
+						echo 'var marcador_original = $("#local_coordenadas").attr("value")
+						if(marcador_original==""){
+							var data = "accion=mostrar_mapa&zona="+$("#local_zona").attr("value");
+						}
+						else{
+							var data = "accion=mostrar_mapa&coordenadas="+$("#local_coordenadas").attr("value");
+						}
+						';
+				}
+				echo '
+						$("#local_cmapa").click(function(){
+							if($("#local_cmapa").attr("checked")){
+								if($("#local_zona").attr("value")!=""){
+									$.ajax({
+										type:"GET",
+										url:"'.url.'/ajax.php",
+					';
+					if($resultado=='editar' && trim($_GET['id'])!=""){
+						echo '			data: data,';
+					}
+					elseif($resultado=='agregar'){
+						echo '			data: "accion=mostrar_mapa&zona="+$("#local_zona").attr("value"),';
+					}
+					echo'				success: function(html){
+											$("#mapa").html(html);
+										}
+									});
+								}
+								else{
+									alert("Debes elegir una zona.");
+									$("#local_cmapa").attr("checked", "");
+									$("#local_coordenadas").attr("value", "");
+								}
+							}
+							else{
+								$("#mapa").html("");
+					';
+					if($resultado=='editar' && trim($_GET['id'])!=""){
+							echo '$("#local_coordenadas").attr("value", marcador_original);';
+					}
+					echo '
+							}
+						});
+						var i=1;
+						$("#agregar_telefono").click(function(event){
+							event.preventDefault();
+							$("#lista_telefono").append("<li class=\"telefonos\" id=\"telefono"+i+"\"><ul class=\"lineal\"><li><input type=\"text\" name=\"local_telefono[]\" /></li><li><select name=\"local_tipo_telefono[]\"><option value=\"\">Elige un tipo</option><option value=\"delivery\">Delivery</option><option value=\"reservaciones\">Reservaciones</option></select></li><li><a href=\"javascript:eliminar(\'telefono"+i+"\');\"><img src=\"'.url.'/plantillas/imagenes/eliminar.png\" /></a></li></ul></li>");
+							i++;
+						});
+						var i=1;
+						$("#agregar_media").click(function(event){
+							event.preventDefault();
+							$("#lista_media").append("<li class=\"media\" id=\"media"+i+"\"><ul class=\"lineal\"><li><input type=\"text\" name=\"local_media[]\" /></li><li><select name=\"local_tipo_media[]\"><option value=\"foto\">Foto</option><option value=\"video\">Video</option></select></li><li><a href=\"javascript:eliminar(\'media"+i+"\');\"><img src=\"'.url.'/plantillas/imagenes/eliminar.png\" /></a></li></ul></li>");
+							i++;
+						});
+					});
+					function eliminar(id){
+						$("#"+id).html("");
+					}
+				</script>
+				';
+			}
+		}
+		if(estas_en('registro')){
+			echo'
+			<script type="text/javascript" language="javascript" src="'.url.'/plantillas/js/jquery-validate/jquery.validate.pack.js"></script>
+			<script type="text/javascript">
+				$(document).ready(function() {
+					$("#registro").validate({
+						rules:{
+							registro_nick: "required",
+							registro_clave: "required",
+							registro_email: {
+								required: true,
+								email: true
+							}
+						},
+						messages:{
+							registro_nick: "Debes escribir un nick.",
+							registro_clave: "Debes escribir una contrase&ntilde;a.",
+							registro_email:  {
+								required: "Debes escribir un email.",
+								email: "El email debe ser v&aacute;lido."
+							}
+						}
+					});
+				});
+			</script>
+			';
+		}
+		if($resultado = estas_en('zona')){
+			if(existe('zona', $resultado[1]) && hay_locales("zona=".$resultado[1])){
+				echo'
+				<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key='.gmaps_api_key.'" type="text/javascript"></script>
+				<script type="text/javascript">
+					$(document).ready(function(){
+						$("#ver-mapa").click(function(event){
+							event.preventDefault();
+							if($("#mapa-locales").html()==""){
+								$.ajax({
+									type:"GET",
+									url:"'.url.'/ajax.php",
+									data: "accion=mostrar_mapa_locales&zona='.$resultado[1].'",
+									success: function(html){
+										$("#mapa-locales").html(html);
+										$("#ver-mapa").html(\'<img src="'.url.'/plantillas/imagenes/mapa.png" />Ocultar\');
+									}
+								});
+							}
+							else{
+								$("#mapa-locales").text("");
+								$("#ver-mapa").html(\'<img src="'.url.'/plantillas/imagenes/mapa.png" />Mapa\');
+							}
+							return false;
+						});
+					});
+				</script>
+				';
+			}
+		}
+		if($resultado = estas_en('locales')){
+			if(existe('zona', $resultado[1]) && existe('categoria', $resultado[2]) && hay_locales("zona=".$resultado[1]."|categoria=".$resultado[2])){
+				echo'
+				<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key='.gmaps_api_key.'" type="text/javascript"></script>
+				<script type="text/javascript">
+					function mostrar_mapa(zona, categoria){
+						alert(zona+" y "+categoria);
+					}
+					$(document).ready(function(){
+						$("#ver-mapa").click(function(event){
+							event.preventDefault();
+							
+							if($("#mapa-locales").html()==""){
+								$.ajax({
+									type:"GET",
+									url:"'.url.'/ajax.php",
+									data: "accion=mostrar_mapa_locales&zona='.$resultado[1].'&categoria='.$resultado[2].'",
+									success: function(html){
+										$("#mapa-locales").html(html);
+										$("#ver-mapa").html(\'<img src="'.url.'/plantillas/imagenes/mapa.png" />Ocultar\');
+									}
+								});
+							}
+							else{
+								$("#mapa-locales").html("");
+								$("#ver-mapa").html(\'<img src="'.url.'/plantillas/imagenes/mapa.png" />Mapa\');
+							}
+							return false;
+						});
+					});
+				</script>
+			';
+			}
+		}
+		if(estas_en('zona') || estas_en('locales')){
+			echo '
+			<script type="text/javascript">
+				$(document).ready(function(){
+					$("#titulo-categorias-1").click(function(){
+						$("#lista-categorias-1").toggle("blind", {direction:"vertical"}, "normal");
+					});
+				});
+			</script>
+			';
+		}
+		if(estas_en('categoria') || estas_en('locales')){
+			echo'
+			<script type="text/javascript">
+				$(document).ready(function(){
+					$("#titulo-zonas-1").click(function(){
+						$("#lista-zonas-1").toggle("blind", {direction:"vertical"}, "normal");
+					});
+				});
+			</script>
+			';
+		}
+		if(estas_en('local')){
+			echo'
+			<link href="'.url.'/plantillas/js/facebox/facebox.css" media="screen" rel="stylesheet" type="text/css"/>
+			<script src="'.url.'/plantillas/js/facebox/facebox.js" type="text/javascript"></script> 
+			<link type="text/css" rel="stylesheet" href="'.url.'/plantillas/js/rating/style.css" />
+			<script type="text/javascript" src="'.url.'/plantillas/js/rating/jquery.rater.js"></script>
+			<script type="text/javascript">
+				function marcar_favorito(id){
+					$.ajax({
+						type:"GET",
+						url:"'.url.'/ajax.php",
+						data: "accion=marcar_favorito&local="+id,
+						success: function(html){
+							$("#local_favorito").html(html);
+						}
+					});
+				}
+				function desmarcar_favorito(id){
+					$.ajax({
+						type:"GET",
+						url:"'.url.'/ajax.php",
+						data: "accion=desmarcar_favorito&local="+id,
+						success: function(html){
+							$("#local_favorito").html(html);
+						}
+					});
+				}
+				$(function() {
+		    		$(\'#votar\').rater({
+		    			postHref: \''.url.'/ajax.php?accion=votar_local&local_id=\'+$(\'#votar\').attr("class")
+					});
+		    	});
+				$(document).ready(function($) {
+					$(\'a[rel*=facebox]\').facebox();
+				});
+			</script>
+			';
+		}
+		if(estas_en('pagina')){
+			echo '
+			<script type="text/javascript" language="javascript" src="'.url.'/plantillas/js/jquery-validate/jquery.validate.pack.js"></script>
+			<script type="text/javascript">
+				$(document).ready(function() {
+					$("#contacto").validate({
+						rules:{
+							nombre: "required",
+							email: {
+								required: true,
+								email: true
+							},
+							mensaje: "required",
+						},
+						messages:{
+							nombre: "Debes escribir un nombre.",
+							email:  {
+								required: "Debes escribir un email.",
+								email: "El email debe ser v&aacute;lido."
+							},
+							mensaje: "Debes escribir un mensaje.",
+						}
+					});
+				});
+			</script>
+			';
+		}
+		if($resultado=estas_en('usuario')){
+			if($resultado[1]==$_COOKIE['nick']){
+				echo '
+					<script type="text/javascript">
+						$(document).ready(function(){
+							$(".eliminar_local").click(function(event){
+								event.preventDefault();
+								var id = $(this).attr("id");
+								var id = id.substring(6);
+								if(confirm("¿Estás seguro de querer eliminar este local?")==true){
+									$.ajax({
+										type:"GET",
+										url:"'.url.'/ajax.php",
+										data: "accion=eliminar_local&id="+id,
+										success: function(text){
+											if(text=="OK"){
+												$("#fila-"+id).fadeOut("slow");
+											}
+										}
+									});
+								}
+							});
+						});
+					</script>
+				';
+			}
+		}
+	}
+	function inicializar(){
+		global $url;
+		$url = parsear_url();
+		if($url=="")
+			include('plantillas/index.php');
+		if(estas_en('categoria') || estas_en('zona') || estas_en('tag') || estas_en('locales'))
+			include('plantillas/locales.php');
+		if(estas_en('local'))
+			include('plantillas/local.php');
+		if(estas_en('registro'))
+			include('plantillas/registro.php');
+		if(estas_en('panel'))
+			include('plantillas/panel.php');
+		if(estas_en('pagina'))
+			include('plantillas/pagina.php');
+		if(estas_en('usuario'))
+			include('plantillas/usuario.php');
+		if(estas_en('busqueda'))
+			include('plantillas/buscar.php');
+		if(estas_en('feed') || estas_en('categoria_feed') || estas_en('zona_feed') || estas_en('locales_feed') || estas_en('tag_feed'))
+			include('feed.php');
+	}
+?>

@@ -1,0 +1,99 @@
+CREATE TABLE categorias(
+  categoria_idPadre bigint(20) unsigned NOT NULL,
+  categoria_id bigint(20) unsigned NOT NULL auto_increment,
+  categoria_titulo varchar(50) NOT NULL,
+  categoria_nombre varchar(50) NOT NULL,
+  PRIMARY KEY(categoria_id)
+);
+CREATE TABLE comentarios(
+  comentario_id bigint(20) unsigned NOT NULL auto_increment,
+  local_id bigint(20) unsigned NOT NULL,
+  usuario_id bigint(20) unsigned NOT NULL,
+  comentario_contenido text NOT NULL,
+  comentario_fecha varchar(11) NOT NULL,
+  PRIMARY KEY(comentario_id)
+);
+CREATE TABLE favoritos(
+  favorito_id bigint(20) unsigned NOT NULL auto_increment,
+  local_id bigint(20) unsigned NOT NULL,
+  usuario_id bigint(20) unsigned NOT NULL,
+  PRIMARY KEY(favorito_id)
+);
+CREATE TABLE votos(
+ local_id bigint(20) unsigned NOT NULL,
+ voto_id bigint(20) unsigned NOT NULL auto_increment,
+ voto_autor bigint(20) unsigned NOT NULL,
+ voto_puntaje float unsigned NOT NULL,
+ PRIMARY KEY(voto_id)
+);
+CREATE TABLE locales(
+  local_id bigint(20) unsigned NOT NULL auto_increment,
+  local_titulo varchar(160) NOT NULL,
+  local_nombre varchar(100) NOT NULL,
+  local_descripcion text NOT NULL,
+  categoria_id bigint(20) unsigned NOT NULL,
+  zona_id bigint(20) unsigned NOT NULL,
+  local_direccion varchar(180) NOT NULL,
+  local_url varchar(100) NULL,
+  usuario_id bigint(20) unsigned NOT NULL,
+  local_coordenadas varchar(50) NOT NULL,
+  local_puntuacion float unsigned NOT NULL default '0',
+  local_fecha varchar(11) NOT NULL,
+  PRIMARY KEY(local_id)
+);
+CREATE TABLE media(
+  media_id bigint(20) unsigned NOT NULL auto_increment,
+  local_id bigint(20) unsigned NOT NULL,
+  media_ruta varchar(200) NOT NULL,
+  media_tipo varchar(10) NOT NULL,
+  media_fecha varchar(11) NOT NULL,
+  PRIMARY KEY(media_id)
+);
+CREATE TABLE paginas(
+  pagina_id bigint(20) unsigned NOT NULL auto_increment,
+  pagina_titulo varchar(50) NOT NULL,
+  pagina_nombre varchar(40) NOT NULL,
+  pagina_contenido text NOT NULL,
+  PRIMARY KEY(pagina_id)
+);
+CREATE TABLE relaciones(
+  relacion_id bigint(20) unsigned NOT NULL auto_increment,
+  local_id bigint(20) unsigned NOT NULL,
+  relacion_idElemento bigint(20) unsigned NOT NULL,
+  relacion_tipo varchar(10) NOT NULL,
+  PRIMARY KEY(relacion_id)
+);
+CREATE TABLE tags(
+  tag_id bigint(20) unsigned NOT NULL auto_increment,
+  tag_titulo varchar(50) NOT NULL,
+  tag_nombre varchar(50) NOT NULL,
+  PRIMARY KEY(tag_id)
+);
+CREATE TABLE telefonos(
+  telefono_id bigint(20) unsigned NOT NULL auto_increment,
+  local_id bigint(20) unsigned NOT NULL,
+  telefono_numero varchar(15) NOT NULL,
+  telefono_tipo varchar(20) NOT NULL,
+  PRIMARY KEY(telefono_id)
+);
+CREATE TABLE usuarios(
+  usuario_id bigint(20) unsigned NOT NULL auto_increment,
+  usuario_nick varchar(30) NOT NULL,
+  usuario_clave varchar(64) NOT NULL,
+  usuario_descripcion mediumtext NOT NULL,
+  usuario_mostrarEmail enum('si','no') NOT NULL default 'no',
+  usuario_email varchar(100) NOT NULL,
+  usuario_url varchar(100) NOT NULL,
+  usuario_rango smallint(2) unsigned NOT NULL default '0',
+  usuario_fecha varchar(11) NOT NULL,
+  PRIMARY KEY(usuario_id)
+);
+CREATE TABLE zonas(
+  zona_idPadre bigint(20) unsigned NOT NULL,
+  zona_id bigint(20) unsigned NOT NULL auto_increment,
+  zona_titulo varchar(50) NOT NULL,
+  zona_nombre varchar(50) NOT NULL,
+  zona_prefijoTel smallint(5) unsigned NOT NULL,
+  zona_coordenadas varchar(50) NOT NULL,
+  PRIMARY KEY(zona_id)
+);
